@@ -18,7 +18,6 @@ class AuthController extends Controller
     {
         //該当するUserモデルを取得する。
         $user = User::find(['uid' => $request->uid]);
-
         //ログイン
         Auth::login($user);
 
@@ -37,7 +36,7 @@ class AuthController extends Controller
         $user = User::create($request->all());
         Auth::login($user);
 
-        return response()->json(['data' => $user], 201);
+        return response()->json(['message' => '新規登録に成功しました'], 201);
     }
 
     /**
@@ -51,17 +50,5 @@ class AuthController extends Controller
         Auth::logout();
 
         return response()->json(['message' => 'ログアウトしました'], 200);
-    }
-
-    /**
-     * ユーザー情報を返す
-     *
-     * @return void
-     */
-    public function me()
-    {
-        $user = auth()->user();
-
-        return response()->json(compact('user'), 200);
     }
 }
