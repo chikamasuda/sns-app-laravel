@@ -44,11 +44,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * 登録処理 eventsテーブルにデータをinsert
-     * 
+     * postsテーブルとのリレーション
+     *
+     * @return void
      */
-    public function insertUsertData($request)
+    public function posts()
     {
-        
+        return $this->hasMany(Post::class);
     }
 }

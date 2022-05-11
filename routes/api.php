@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -16,10 +17,8 @@ use App\Http\Controllers\AuthController;
 */
 //認証
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'login']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/user', [AuthController::class, 'me']);
 
-Route::middleware('auth:api')->group(function () {
-    //ユーザー情報
-});
+
+//投稿
+Route::apiResource('/post', PostController::class)->only(['index', 'destroy', 'store']);
