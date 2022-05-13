@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Like;
 
 class Post extends Model
 {
@@ -22,7 +21,7 @@ class Post extends Model
      *
      * @return void
      */
-    public function users(): BelongsTo
+    public function users()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -32,19 +31,8 @@ class Post extends Model
      *
      * @return void
      */
-    public function likes(): BelongsToMany
+    public function likes()
     {
-        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
-    }
-
-    /**
-     * いいねされてるか判定するメソッド
-     *
-     * @param User|null $user
-     * @return boolean
-     */
-    public function isLikedBy($uid): bool
-    {
-        return $uid ? (bool)$this->likes->where('uid', $uid)->count() : false;
+        return $this->hasMeny(Like::class);
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,5 @@ use App\Http\Controllers\AuthController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/user', [AuthController::class, 'me']);
 
-
-//投稿
+//投稿CRUD
 Route::apiResource('/post', PostController::class)->only(['index', 'destroy', 'store']);

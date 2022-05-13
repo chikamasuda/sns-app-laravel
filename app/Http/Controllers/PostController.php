@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like;
 
 class PostController extends Controller
 {
@@ -17,7 +18,7 @@ class PostController extends Controller
    */
   public function index()
   {
-    $item = Post::with('users')->get();
+    $item = Post::with(['users', 'likes'])->get();
     return response()->json(['data' => $item], 200);
   }
 
