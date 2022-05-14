@@ -15,8 +15,8 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->text('text');
+            $table->integer('user_id')->comment('ユーザーテーブルのID');
+            $table->text('text')->comment('投稿文');
             $table->timestamps();
         });
     }

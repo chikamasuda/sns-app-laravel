@@ -16,9 +16,14 @@ use App\Http\Controllers\LikeController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//認証
+//ユーザー登録
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/user', [AuthController::class, 'me']);
 
 //投稿CRUD
 Route::apiResource('/post', PostController::class)->only(['index', 'destroy', 'store']);
+
+//いいね登録
+Route::post('/post/{post}/like', [LikeController::class, 'like']);
+
+//いいね取り消し
+Route::post('/post/{post}/unlike', [LikeController::class, 'unlike']);

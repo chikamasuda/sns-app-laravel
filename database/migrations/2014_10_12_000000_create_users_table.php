@@ -15,9 +15,9 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('uid');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('uid')->unique()->comment('firebaseのuid');
+            $table->string('name')->comment('ユーザー名');
+            $table->string('email')->unique()->comment('Eメール');
             $table->timestamps();
         });
     }

@@ -5,29 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Like;
+
 
 class LikeController extends Controller
 {
     /**
-     * いいねされてるか判定するメソッド
+     * いいね登録
      *
-     * @param User|null $user
-     * @return boolean
+     * @return void
      */
-    public function isLikedBy(Request $request)
+    public function like(Request $request, Post $post)
     {
-        $user_id = $request->user_id;
-        $post_id = $request->post_id;
+        $user_id = User::where('uid', $request->uid)->pluck('id');
 
-        if ($user_id) {
-            $post = Post::find($post_id)->likes->first();
-            $result = (bool)$post->whereHas('likes',  function ($query) use ($user_id) {
-                $query->where('likes.user_id', $user_id);
-            })->count();
-            return response()->json(['data' => $result], 200);
+        $like = new Like();
+        $like->post_id = $post->id;
+        $like->user_id = $user_id[0];
+        $like->uid = $request->uid;
+        $like->save();
+
+        return response()->json(['data' => $like], 201);
+    }
+
+    /**
+     * いいね取り消し
+     *
+     * @param Post $post
+     * @return void
+     */
+    public function unlike(Request $request, Post $post)
+    {
+        $like = Like::where('post_id', $post->id)->where('uid', $request->uid)->first();
+        $like->delete();
+
+        if ($like) {
+            return response()->json(['message' => 'Deleted successfully'], 200);
         } else {
-            $result = false;
-            return response()->json(['data' => $result], 200);
+            return response()->json(['message' => 'Not found'], 404);
         }
     }
 }

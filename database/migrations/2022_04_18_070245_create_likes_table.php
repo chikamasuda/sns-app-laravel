@@ -15,8 +15,9 @@ class CreateLikesTable extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('post_id')->constrained('posts');
+            $table->integer('user_id')->comment('ユーザーテーブルのID');
+            $table->integer('post_id')->comment('投稿テーブルのID');
+            $table->string('uid')->unique()->comment('firebaseのuid');
             $table->timestamps();
         });
     }
