@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
@@ -28,12 +28,12 @@ class PostController extends Controller
    * @param Request $request
    * @return void
    */
-  public function store(Request $request)
+  public function store(PostRequest $request)
   {
-    $id = User::where('uid', $request->uid)->pluck('id');
+    $user_id = User::where('uid', $request->uid)->pluck('id');
 
     $post = new Post();
-    $post->user_id = $id[0];
+    $post->user_id = $user_id[0];
     $post->text = $request->text;
     $post->save();
 
