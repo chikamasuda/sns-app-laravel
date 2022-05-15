@@ -58,7 +58,7 @@ class PostRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         $response['data']    = [];
-        $response['status']  = 'NG';
+        $response['status']  = '422';
         $response['summary'] = 'Failed validation.';
         $response['errors']  = $validator->errors()->toArray();
 
