@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,13 @@ use App\Http\Controllers\LikeController;
 Route::post('/register', [AuthController::class, 'register']);
 
 //投稿CRUD
-Route::apiResource('/post', PostController::class)->only(['index', 'destroy', 'store']);
+Route::apiResource('/posts', PostController::class)->only(['index', 'destroy', 'store', 'show']);
+
+//コメント
+Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
 
 //いいね登録
-Route::post('/post/{post}/like', [LikeController::class, 'like']);
+Route::post('/posts/{post}/like', [LikeController::class, 'like']);
 
 //いいね取り消し
-Route::post('/post/{post}/unlike', [LikeController::class, 'unlike']);
+Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike']);

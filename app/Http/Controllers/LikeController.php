@@ -25,7 +25,7 @@ class LikeController extends Controller
         $like->uid = $request->uid;
         $like->save();
 
-        return response()->json(['like' => $like], 201);
+        return response()->json(['data' => $like], 201);
     }
 
     /**

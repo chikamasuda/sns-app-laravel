@@ -17,7 +17,7 @@ class CreateLikesTable extends Migration
             $table->id();
             $table->integer('user_id')->comment('ユーザーテーブルのID');
             $table->integer('post_id')->comment('投稿テーブルのID');
-            $table->string('uid')->unique()->comment('firebaseのuid');
+            $table->string('uid')->index()->comment('firebaseのuid');
             $table->timestamps();
         });
     }

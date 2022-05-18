@@ -41,6 +41,23 @@ class PostController extends Controller
   }
 
   /**
+   * コメントページの投稿を表示
+   *
+   * @param Post $post
+   * @return void
+   */
+  public function show(Post $post)
+  {
+    $post = Post::with(['users', 'likes'])->where('id', $post->id)->get();
+
+    if ($post) {
+      return response()->json(['post' => $post], 200);
+    } else {
+      return response()->json(['message' => 'Not found'], 404);
+    }
+  }
+
+  /**
    * ホーム画面の投稿削除
    *
    * @param Post $post
