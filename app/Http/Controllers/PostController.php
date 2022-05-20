@@ -32,10 +32,11 @@ class PostController extends Controller
   {
     $user_id = User::where('uid', $request->uid)->pluck('id');
 
-    $post = new Post();
-    $post->user_id = $user_id[0];
-    $post->text = $request->text;
-    $post->save();
+    $post = Post::create([
+      'id'      => $request->id,
+      'user_id' => $user_id[0],
+      'text'    => $request->text,
+    ]);
 
     return response()->json(['data' => $post], 201);
   }

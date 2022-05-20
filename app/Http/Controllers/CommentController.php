@@ -34,11 +34,12 @@ class CommentController extends Controller
   {
     $user_id = User::where('uid', $request->uid)->pluck('id');
 
-    $comment = new Comment();
-    $comment->user_id = $user_id[0];
-    $comment->post_id = $post->id;
-    $comment->comment = $request->comment;
-    $comment->save();
+    $comment = Comment::create([
+      'id'      => $request->id,
+      'user_id' => $user_id[0],
+      'post_id' => $post->id,
+      'comment' => $request->comment,
+    ]);
 
     return response()->json(['data' => $comment], 201);
   }
