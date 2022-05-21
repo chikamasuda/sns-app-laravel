@@ -55,6 +55,12 @@ class PostRequest extends FormRequest
         ];
     }
 
+    /**
+     * バリデーション失敗時の挙動
+     *
+     * @param Validator $validator
+     * @return void
+     */
     protected function failedValidation(Validator $validator)
     {
         $response['data']    = [];
