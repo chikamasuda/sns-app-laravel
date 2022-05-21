@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Post;
 use App\Models\Like;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class LikeController extends Controller
@@ -17,16 +18,17 @@ class LikeController extends Controller
    */
   public function like(Request $request, Post $post)
   {
-    $user_id = User::where('uid', $request->uid)->pluck('id');
-
-    $like = Like::create([
-      'id'      => $request->id,
-      'post_id' => $post->id,
-      'user_id' => $user_id[0],
-      'uid'     => $request->uid,
-    ]);
-
-    return response()->json(['data' => $like], 201);
+    try {
+      DB::beginTransaction();
+      $like = Like::createLike($request, $post);
+      DB::commit();
+      return response()->json(['data' => $like], 201);
+    } catch (\Throwable $e) {
+      DB::rollback();
+      Log::error($e);
+      //フロントにエラーを投げる
+      throw $e;
+    }
   }
 
   /**
@@ -37,13 +39,19 @@ class LikeController extends Controller
    */
   public function unlike(Request $request, Post $post)
   {
-    $like = Like::where('post_id', $post->id)->where('uid', $request->uid)->first();
-    $like->delete();
-
-    if ($like) {
-      return response()->json(['message' => 'Deleted successfully'], 200);
-    } else {
-      return response()->json(['message' => 'Not found'], 404);
+    try {
+      DB::beginTransaction();
+      $like = Like::deleteLike($request, $post);
+      DB::commit();
+      if ($like) {
+        return response()->json(['message' => 'Deleted successfully'], 200);
+      } else {
+        return response()->json(['message' => 'Not found'], 404);
+      }
+    } catch (\Throwable $e) {
+      DB::rollback();
+      Log::error($e);
+      throw $e;
     }
   }
 }

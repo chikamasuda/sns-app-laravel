@@ -64,4 +64,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * ユーザー登録
+     *
+     * @param [type] $request
+     * @return void
+     */
+    public static function register($request)
+    {
+        $user = User::create($request->all());
+        return $user;
+    }
 }

@@ -4,23 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
 use App\Models\Post;
-use App\Models\User;
-use App\Models\Like;
 use App\Models\Comment;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
   /**
-   * コメント一覧
+   * コメント一覧取得
    *
    * @param Post $post
    * @return void
    */
   public function index(Post $post)
   {
-    $comments = Comment::with('users')->where('post_id', $post->id)->get();
-
-    return response()->json(['comments' =>  $comments], 200);
+    try {
+      $comments = Comment::getComments($post);
+      return response()->json(['comments' =>  $comments], 200);
+    } catch (\Throwable $e) {
+      // 全てのエラー・例外をキャッチしてログに残す
+      Log::error($e);
+      // フロントに異常を通知するため例外はそのまま投げる
+      throw $e;
+    }
   }
 
   /**
@@ -32,15 +38,15 @@ class CommentController extends Controller
    */
   public function store(CommentRequest $request, Post $post)
   {
-    $user_id = User::where('uid', $request->uid)->pluck('id');
-
-    $comment = Comment::create([
-      'id'      => $request->id,
-      'user_id' => $user_id[0],
-      'post_id' => $post->id,
-      'comment' => $request->comment,
-    ]);
-
-    return response()->json(['data' => $comment], 201);
+    try {
+      DB::beginTransaction();
+      $comment = Comment::createComment($request, $post);
+      DB::commit();
+      return response()->json(['data' => $comment], 201);
+    } catch (\Throwable $e) {
+      DB::rollback();
+      Log::error($e);
+      throw $e;
+    }
   }
 }
