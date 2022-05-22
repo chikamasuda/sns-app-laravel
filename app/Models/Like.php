@@ -32,16 +32,9 @@ class Like extends Model
      * @param Post $post
      * @return void
      */
-    public static function createLike($request, $post)
+    public static function createLike($request)
     {
-        $user_id = User::where('uid', $request->uid)->pluck('id');
-
-        $like = Like::create([
-            'id'      => $request->id,
-            'post_id' => $post->id,
-            'user_id' => $user_id[0],
-            'uid'     => $request->uid,
-        ]);
+        $like = Like::create($request->all());
 
         return $like;
     }
@@ -53,9 +46,9 @@ class Like extends Model
      * @param Post $post
      * @return void
      */
-    public static function deleteLike($request, $post)
+    public static function deleteLike($like)
     {
-        $like = Like::where('post_id', $post->id)->where('uid', $request->uid)->first();
+        $like = Like::where('id', $like->id)->first();
         $like->delete();
         return $like;
     }

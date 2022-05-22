@@ -26,8 +26,5 @@ Route::apiResource('/posts', PostController::class)->only(['index', 'destroy', '
 //コメント
 Route::apiResource('/posts/{post}/comments', CommentController::class)->only(['index', 'store']);
 
-//いいね登録
-Route::post('/posts/{post}/like', [LikeController::class, 'like']);
-
-//いいね取り消し
-Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike']);
+//いいね
+Route::apiResource('/likes', LikeController::class)->only(['destroy', 'store']);

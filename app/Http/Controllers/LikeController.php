@@ -16,13 +16,13 @@ class LikeController extends Controller
    *
    * @return void
    */
-  public function like(Request $request, Post $post)
+  public function store(Request $request)
   {
     try {
       DB::beginTransaction();
-      $like = Like::createLike($request, $post);
+      $like = Like::createLike($request);
       DB::commit();
-      return response()->json(['data' => $like], 201);
+      return response()->json(['like' => $like], 201);
     } catch (\Throwable $e) {
       DB::rollback();
       Log::error($e);
@@ -37,11 +37,11 @@ class LikeController extends Controller
    * @param Post $post
    * @return void
    */
-  public function unlike(Request $request, Post $post)
+  public function destroy(Like $like)
   {
     try {
       DB::beginTransaction();
-      $like = Like::deleteLike($request, $post);
+      $like = Like::deleteLike($like);
       DB::commit();
       if ($like) {
         return response()->json(['message' => 'Deleted successfully'], 200);

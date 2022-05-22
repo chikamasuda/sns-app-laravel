@@ -11,25 +11,6 @@ use Illuminate\Support\Facades\Log;
 class CommentController extends Controller
 {
   /**
-   * コメント一覧取得
-   *
-   * @param Post $post
-   * @return void
-   */
-  public function index(Post $post)
-  {
-    try {
-      $comments = Comment::getComments($post);
-      return response()->json(['comments' =>  $comments], 200);
-    } catch (\Throwable $e) {
-      // 全てのエラー・例外をキャッチしてログに残す
-      Log::error($e);
-      // フロントに異常を通知するため例外はそのまま投げる
-      throw $e;
-    }
-  }
-
-  /**
    * コメント投稿
    *
    * @param Request $request
